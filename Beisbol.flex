@@ -1,4 +1,4 @@
-/* Julio César Guzmán Benavides			*/
+/* Julio César Guzmán Benavides		 A82939	*/
 /*	Carlos Alberto Mata Guzmán	 B13980 */
 %%
 
@@ -9,8 +9,11 @@
 %unicode
 
 %{
-	int out;
-	int base;
+	int [] bases = new int[]{0,0,0,0};
+	int carrerasLocal = 0;
+	int carrerasVisita = 0;
+	int entrada = 1;
+	int out = 0;
 	
   
 %}
