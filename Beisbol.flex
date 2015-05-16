@@ -17,19 +17,18 @@
 	boolean esCasa = true;
 	
 	public void revisarCarreras(boolean casa){
-		if(casa){
-		    if(vecBases[3]==1){
-		        carrerasLocal++;
-		        vecBases[3]=0;
-		    }
-		}
-		else{
-		    if(vecBases[3]==1){
-		        carrerasVisita++;
-		        vecBases[3]=0;
-		    }		    
-		}
-	} 
+		if(vecBases[3]==1){
+		      if(casa){
+		          carrerasLocal++;
+		      }
+		      else{
+		           carrerasVisita++;
+		      }
+		      vecBases[3]=0;
+		}	
+		
+        }		    
+
 	public void avanzarBases(){
 		  vecBases[3]=vecBases[2];
 	    	  vecBases[2]=vecBases[1];
@@ -107,6 +106,20 @@
 	                vecBases[i] = 0;
 	          }
 	          break;
+	    case 7:                 //Base por bolas
+	    	 if(vecBases[0]==0){
+	    	       vecBases[0]=1;         //Bateador va a primera
+	    	 }
+	    	 else{
+	    	      if(vecBases[1]==0){          //Segunda esta vacia
+	    	            vecBases[1]=vecBases[0];
+	    	            vecBases[0]=1;
+	    	      }
+	    	      else{                        // Primera y segunda llenas
+	    	            avanzarBases();
+	    	            revisarCarreras(esCasa);
+	    	      }
+	    	 }
 	    }  
   }
 %}
