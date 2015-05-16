@@ -54,29 +54,18 @@
 	          } 
 	    	  out++;
 	    	  break;
-	    case 2:                          //Double Play CAMBIAR, ADELANTAR TODOS Y QUEMAR DOS PRIMEROS
-	    	  int hombresEnBase = 0;
-	    	  for(int i=0; i<4; ++i){
+	    case 2:                          //Double Play 
+	    	  vecBases[3]=vecBases[2];
+	    	  vecBases[2]=vecBases[1];
+	    	  vecBases[1]=vecBases[0];
+	    	  vecBases[0]=1;
+	    	  
+	    	  int outs = 0;
+	    	  int i = 3;
+	    	  while((outs<3)&&(i>=0){
 	    	  	if(vecBases[i]==1){
-	    	  	    hombresEnBase++;
-	    	  	}
-	    	  }
-	    	  if(hombresEnBase<2){
-	    	  	for(int i=0; i<4; i++){
-	    	  	     vecBases[i]=0;
-	    	  	}
-	    	  	out+=2;
-	    	  }
-	    	  else{
-	    	  	if(hombresEnBase == 2){
-	    	  	    for(int i=0; i<4; i++){
-	    	  	        vecBases[i]=0;
-	    	  	    }
-	    	  	 out+=2;
-	    	  	 }
-	    	         else{
-	    	  	     vecBases[2]==0;
-	    	  	     out+=2;
+	    	  	    vecBases[i]=0;
+	    	  	    outs++;
 	    	  	}
 	    	  }
 	    	  break;
