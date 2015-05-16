@@ -30,7 +30,12 @@
 		    }		    
 		}
 	} 
-	
+	public void avanzarBases(){
+		  vecBases[3]=vecBases[2];
+	    	  vecBases[2]=vecBases[1];
+	    	  vecBases[1]=vecBases[0];
+	    	  vecBases[0]=1;
+	}
 	public void bases(int situacion){
 	    swich(situacion){
 	    case 0:             //no cambian las bases
@@ -38,10 +43,7 @@
 	          break;
 	    
 	    case 1:      //Busca al jugador en la base más avanzada y lo elimina
-	    	  vecBases[3]=vecBases[2];
-	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[1]=vecBases[0];
-	    	  vecBases[0]=1;
+		  avanzarBases();
 	    
 	    	  boolean limpiarBase = false;
 	    	  int i = 3;
@@ -55,10 +57,7 @@
 	    	  out++;
 	    	  break;
 	    case 2:                          //Double Play 
-	    	  vecBases[3]=vecBases[2];
-	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[1]=vecBases[0];
-	    	  vecBases[0]=1;
+		  avanzarBases();
 	    	  
 	    	  int outs = 0;
 	    	  int i = 3;
@@ -70,38 +69,25 @@
 	    	  }
 	    	  break;
 	    case 3:
-	          vecBases[3]=vecBases[2];
-	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[1]=vecBases[0];
-	    	  vecBases[0]=1;
+		  avanzarBases();
 	    	  revisarCarreras(esCasa);
 	    	  break;
 	    case 4: 			//Bateador avanzo a segunda
-	          vecBases[3]=vecBases[2];
-	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[1]=vecBases[0];
-	    	  vecBases[0]=1;
+		  avanzarBases();
 	    	  revisarCarreas(esCasa);
-	          vecBases[3]=vecBases[2];
-	          vecBases[2]=vecBases[1];
-	          vecBases[1]=vecBases[0];
+		  avanzarBases();
 	          vecBases[0]=0;
 	          revisarCarreras(esCasa);
 	          break;
 	     case 5:			//	Bateador avanzo a Tercera
-	          vecBases[3]=vecBases[2];
-	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[1]=vecBases[0];
-	    	  vecBases[0]=1;
+		  avanzarBases();
 	    	  revisarCarreas(esCasa);
-	          vecBases[3]=vecBases[2];
-	          vecBases[2]=vecBases[1];
-	          vecBases[1]=vecBases[0];
+	    	  avanzarBases();
 	          vecBases[0]=0;
 	          revisarCarreras(esCasa);
-	          vecBases[3]=vecBases[2];
-	          vecBases[2]=vecBases[1];
+	          avanzarBases();
 	          vecBases[1]=0;
+	          vecBases[0]=0;
 	          revisarCarreras(esCasa);
 	          break;
 	     case 6:			// Bateador avanzo a Cuarta
@@ -113,11 +99,12 @@
 	          }
 	          if(esCasa){
 	                carrerasLocal = carrerasCasa+hombresEnBase;
-	                //BLANQUEAR BASES
 	          }
 	          else{
 	                carrrerasVisita = carrerasVisita+hombresEnBase;
-	                //BLANQUEAR BASES
+	          }
+	          for(int i = 0; i<4; i++){
+	                vecBases[i] = 0;
 	          }
 	          break;
 	    }  
