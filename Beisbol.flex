@@ -40,7 +40,7 @@
 	    case 1:      //Busca al jugador en la base más avanzada y lo elimina
 	    	  vecBases[3]=vecBases[2];
 	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[3]=vecBases[0];
+	    	  vecBases[1]=vecBases[0];
 	    	  vecBases[0]=1;
 	    
 	    	  boolean limpiarBase = false;
@@ -54,7 +54,7 @@
 	          } 
 	    	  out++;
 	    	  break;
-	    case 2:                          //Double Play
+	    case 2:                          //Double Play CAMBIAR, ADELANTAR TODOS Y QUEMAR DOS PRIMEROS
 	    	  int hombresEnBase = 0;
 	    	  for(int i=0; i<4; ++i){
 	    	  	if(vecBases[i]==1){
@@ -83,14 +83,14 @@
 	    case 3:
 	          vecBases[3]=vecBases[2];
 	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[3]=vecBases[0];
+	    	  vecBases[1]=vecBases[0];
 	    	  vecBases[0]=1;
 	    	  revisarCarreras(esCasa);
 	    	  break;
 	    case 4: 			//Bateador avanzo a segunda
 	          vecBases[3]=vecBases[2];
 	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[3]=vecBases[0];
+	    	  vecBases[1]=vecBases[0];
 	    	  vecBases[0]=1;
 	    	  revisarCarreas(esCasa);
 	          vecBases[3]=vecBases[2];
@@ -102,7 +102,7 @@
 	     case 5:			//	Bateador avanzo a Tercera
 	          vecBases[3]=vecBases[2];
 	    	  vecBases[2]=vecBases[1];
-	    	  vecBases[3]=vecBases[0];
+	    	  vecBases[1]=vecBases[0];
 	    	  vecBases[0]=1;
 	    	  revisarCarreas(esCasa);
 	          vecBases[3]=vecBases[2];
@@ -113,9 +113,10 @@
 	          vecBases[3]=vecBases[2];
 	          vecBases[2]=vecBases[1];
 	          vecBases[1]=0;
+	          revisarCarreras(esCasa);
 	          break;
 	     case 6:			// Bateador avanzo a Cuarta
-	          int hombresEnBase = 0;
+	          int hombresEnBase = 1;
 	          for(int i = 0; i<4; i++){
 	          	if(vecBases[i]==1){
 	          	     hombresEnBase++;
@@ -123,9 +124,11 @@
 	          }
 	          if(esCasa){
 	                carrerasLocal = carrerasCasa+hombresEnBase;
+	                //BLANQUEAR BASES
 	          }
 	          else{
 	                carrrerasVisita = carrerasVisita+hombresEnBase;
+	                //BLANQUEAR BASES
 	          }
 	          break;
 	    }  
@@ -156,7 +159,7 @@ HomeRun = "4B"|"4b"|"HR"|"Hr"|"hR"|hr
 ({OutEnEquipo}){bases(1);} //Out al jugador en la base más avanzada, cambia las bases aumenta los outs
 ({OutAereo} {bases(0);}    //Solo aumenta un out, no cambia las bases
 ({DobleJugada}) {bases(2);}  // Hay que eliminar dos jugadores contrarios y agregar dos outs
-({ToqueSacrificio} {bases(1);}  //Out al jugador en la base más avanzada, cambia las bases aumenta los outs
+({ToqueSacrificio} {bases(1);}  //HACER OTRO CASO, QUEMAR PRIMERA  Out al jugador en la base más avanzada, cambia las bases aumenta los outs
 {OutYAvance}) {bases(1);}    //Solo aumenta un out, no cambia las bases
 ({ErrorYAvance}|{JugadorGolpeado}|{BasePorBolas}|{Hit}) {base(3);}
 {Doble} {base(4);}
