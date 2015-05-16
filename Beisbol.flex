@@ -14,13 +14,27 @@
 	int carrerasVisita = 0;
 	int entrada = 1;
 	int out = 0;
+	boolean esCasa = true;
+	
+	public void revisarCarreras(boolean casa){
+		if(casa){
+		    if(vecBases[3]==1){
+		        carrerasLocal++;
+		    }
+		}
+		else{
+		    if(vecBases[3]==1){
+		        carrerasVisita++;
+		    }		    
+		}
+	} 
 	
 	public void bases(int situacion){
 	    swich(situacion){
 	    case 0:             //no cambian las bases
 	          out++;
 	          break;
-	    }
+	    
 	    case 1:      //Busca al jugador en la base más avanzada y lo elimina
 	    	  vecBases[3]=vecBases[2];
 	    	  vecBases[2]=vecBases[1];
@@ -38,7 +52,7 @@
 	          } 
 	    	  out++;
 	    	  break;
-	    case 2:
+	    case 2:                          //Double Play
 	    	  int hombresEnBase = 0;
 	    	  for(int i=0; i<4; ++i){
 	    	  	if(vecBases[i]==1){
@@ -69,8 +83,51 @@
 	    	  vecBases[2]=vecBases[1];
 	    	  vecBases[3]=vecBases[0];
 	    	  vecBases[0]=1;
-	}
-  
+	    	  revisarCarreras(esCasa);
+	    	  break;
+	    case 4: 			//Bateador avanzo a segunda
+	          vecBases[3]=vecBases[2];
+	    	  vecBases[2]=vecBases[1];
+	    	  vecBases[3]=vecBases[0];
+	    	  vecBases[0]=1;
+	    	  revisarCarreas(esCasa);
+	          vecBases[3]=vecBases[2];
+	          vecBases[2]=vecBases[1];
+	          vecBases[1]=vecBases[0];
+	          vecBases[0]=0;
+	          revisarCarreras(esCasa);
+	          break;
+	     case 5:			//	Bateador avanzo a Tercera
+	          vecBases[3]=vecBases[2];
+	    	  vecBases[2]=vecBases[1];
+	    	  vecBases[3]=vecBases[0];
+	    	  vecBases[0]=1;
+	    	  revisarCarreas(esCasa);
+	          vecBases[3]=vecBases[2];
+	          vecBases[2]=vecBases[1];
+	          vecBases[1]=vecBases[0];
+	          vecBases[0]=0;
+	          revisarCarreras(esCasa);
+	          vecBases[3]=vecBases[2];
+	          vecBases[2]=vecBases[1];
+	          vecBases[1]=0;
+	          break;
+	     case 6:			// Bateador avanzo a Cuarta
+	          int hombresEnBase = 0;
+	          for(int i = 0; i<4; i++){
+	          	if(vecBases[i]==1){
+	          	     hombresEnBase++;
+	          	}
+	          }
+	          if(esCasa){
+	                carrerasLocal = carrerasCasa+hombresEnBase;
+	          }
+	          else{
+	                carrrerasVisita = carrerasVisita+hombresEnBase;
+	          }
+	          break;
+	    }  
+  }
 %}
 
 Jugador = [0-9]
@@ -100,6 +157,6 @@ HomeRun = "4B"|"4b"|"HR"|"Hr"|"hR"|hr
 ({ToqueSacrificio} {bases(1);}  //Out al jugador en la base más avanzada, cambia las bases aumenta los outs
 {OutYAvance}) {bases(1);}    //Solo aumenta un out, no cambia las bases
 ({ErrorYAvance}|{JugadorGolpeado}|{BasePorBolas}|{Hit}) {base(3);}
-{Doble} {System.out.println("AVANZA 2");base=base+2;}
-{Triple} {System.out.println("AVANZA 3");base=base+3;}
-{HomeRun} {System.out.println("HOME RUN!!");base=base+4;}
+{Doble} {base(4);}
+{Triple} {base(5);}
+{HomeRun} {base(6);}
