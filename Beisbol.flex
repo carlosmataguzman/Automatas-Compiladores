@@ -129,7 +129,7 @@
 	    }  
   }
 %}
-
+  
 Jugador = [0-9]
 Ponche = "K"|"k"
 OutEnEquipo = ({Jugador}{Jugador})
