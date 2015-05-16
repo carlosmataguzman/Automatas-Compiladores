@@ -9,7 +9,7 @@
 %unicode
 
 %{
-	int [] vecBases = new int[]{0,0,0,0};
+	int [] vecBases = new int[]{0,0,0,0};  // revisar declaracion del vector
 	int carrerasLocal = 0;
 	int carrerasVisita = 0;
 	int entrada = 1;
@@ -20,11 +20,13 @@
 		if(casa){
 		    if(vecBases[3]==1){
 		        carrerasLocal++;
+		        vecBases[3]=0;
 		    }
 		}
 		else{
 		    if(vecBases[3]==1){
 		        carrerasVisita++;
+		        vecBases[3]=0;
 		    }		    
 		}
 	} 
