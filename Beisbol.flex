@@ -21,20 +21,22 @@ void Imprimir(){
 	System.out.println("*---------------------------------------------------*\n");
 	System.out.println("|  CASA    |  OUT  |  ENTRADA  |  BASES  |  VISITA  |\n");
 	System.out.println("|----------+-------+-----------+---------+----------+\n");
-	System.out.println(PonerDatos());
+ 	System.out.println(PonerDatos());                    
 	System.out.println("*---------------------------------------------------*\n");
 }
 String PonerDatos(){
 	String ayudante = "";
-	ayudante = PonerBlancos(Integer.toString(casa),7); //La columna CASA tiene 10 espacios, se empieza a escribir al 3ro.
+	ayudante = PonerBlancos(Integer.toString(carrerasLocal),7); //La columna CASA tiene 10 espacios, se empieza a escribir al 3ro.
 	String resultado = "|   "+ayudante+"|   "+(outs+3)%3+"   ";  //Se suma 3 a los outs para el caso de los 3 primeros outs del juego.
 	ayudante = PonerBlancos(Integer.toString((outs/6)+1),4); //Espacios en blanco para la columna ENTRADA.
-	if(outs%6>2){//Se indica cuál equipo está bateandao, ALTA=CASA, BAJA=VISITA
-		resultado = resultado+"| ALTA  "+ayudante+"|         "; //Falta completar bases
+	if(outs%6>3){//Se indica cuál equipo está bateandao, ALTA=CASA, BAJA=VISITA
+		resultado = resultado+"| ALTA  "+ayudante; //Falta completar bases
 	}else{
-		resultado = resultado+"| BAJA  "+ayudante+"|         ";
+		resultado = resultado+"| BAJA  "+ayudante;
 	}
-	ayudante = PonerBlancos(Integer.toString(visita),7); //La columna VISITA tiene 10 espacios, se empieza a escribir al 3ro.
+	ayudante = PonerBases();
+	resultado = resultado+"|"+ayudante;
+	ayudante = PonerBlancos(Integer.toString(carrerasVisita),7); //La columna VISITA tiene 10 espacios, se empieza a escribir al 3ro.
 	resultado = resultado+"|   "+ayudante+"|\n";
 	return resultado;
 }
@@ -48,14 +50,19 @@ String PonerBlancos(String palabra, int tamanoEspacio){
 }
 
 String PonerBases(){
-	String resultado = "O  O  O";
+	String resultado = "";
 	for(int i=0; i<3; i++){
-		if(1==vecBases[i])resultado.charAt(i*3)='C'; 
+		resultado = (1==vecBases[i])?resultado+" C ":resultado+" O "; 
 	}
 	return resultado;
 }
 
+/*-------------------MÉTODOS DE CONTROL DE JUEGO---------------------*/
+
 void revisarCarreras(int carreras){
+		for(int i =0; i<4; i++){
+		System.out.println(vecBases[i]+" ");
+		}
 		boolean casa = true;
 		if(outs%6<3)casa = false;
 		if(vecBases[3]==1){
@@ -63,7 +70,7 @@ void revisarCarreras(int carreras){
 		          carrerasLocal= carrerasLocal+carreras;
 		      }
 			  else{
-		           carrerasVisita= carrerasLocal+carreras;
+		           carrerasVisita= carrerasVisita+carreras;
 		      }
 		      vecBases[3]=0;
 		}			
@@ -75,31 +82,37 @@ void avanzarBases(){
 	vecBases[1]=vecBases[0];
 	vecBases[0]=1;
 }
-/*------------------- MÉTODO EMULADOR DE JUEGO -----------------------*/
-void base(int situacion){
+
+void bases(int situacion){
+	
+	if(outs%3==0&&outs!=0){ //Revisa si ya se acabó la entrada.
+		for(int i=0; i<4; i++){
+			vecBases[i]=0; 
+		}
+	}
 	switch(situacion){	    
 	    case 1:      //Busca al jugador en la base más avanzada y lo elimina
 			avanzarBases();
 			boolean limpiarBase = false;
-			int i = 3;
-			while((i>=0)&&(!limpiarBase)){
-				if(vecBases[i]==1){
-					vecBases[i]=0;
+			int j = 3;
+			while((j>=0)&&(!limpiarBase)){
+				if(vecBases[j]==1){
+					vecBases[j]=0;
 					limpiarBase = true;
 				}
-				i--;
+				j--;
 			} 
-	    	  //out++;
 	    	break;
 	    case 2:                          //Double Play 
 			avanzarBases();
-			int out = 0;
-	    	int i = 3;
-	    	while((out<3)&&(i>=0)){
-				if(vecBases[i]==1){
-					vecBases[i]=0;
+	    	int out =0;
+			int k = 3;
+			while(out!=2){	
+				if(vecBases[k]==1){
+					vecBases[k]=0;
 					out++;
-	    	  	}
+				}
+				k--;
 	    	}
 			break;
 	    case 3:            //Avance normal
@@ -108,20 +121,20 @@ void base(int situacion){
 	    	break;
 	    case 4: 			//Bateador avanzo a segunda
 			avanzarBases();
-			revisarCarreas(1);
+			revisarCarreras(1);
 			avanzarBases();
 			vecBases[0]=0;
 	        revisarCarreras(1);
 	        break;
 	     case 5:			//	Bateador avanzo a Tercera
 			avanzarBases();
-			revisarCarreas(1);
+			revisarCarreras(1);
 			avanzarBases();
 			vecBases[0]=0;
 	        revisarCarreras(1);
 	        avanzarBases();
-	        vecBases[1]=0;
 	        vecBases[0]=0;
+	        vecBases[1]=0;
 			revisarCarreras(1);
 			break;
 	     case 6:			// Bateador avanzo a Cuarta
@@ -131,7 +144,12 @@ void base(int situacion){
 					hombresEnBase++;
 				}
 	        }
-	        revisarCarreas(hombresEnBase);
+	        if(outs%6>2){
+				carrerasLocal=hombresEnBase+carrerasLocal;
+			}
+			else{
+				carrerasVisita=hombresEnBase+carrerasVisita;
+			}
 	        for(int i = 0; i<4; i++){
 				vecBases[i] = 0;
 	        }
@@ -150,7 +168,12 @@ void base(int situacion){
 	    	            revisarCarreras(1);
 	    	      }
 	    	 }
-	    }  
+			break;
+		case 8: // Toque de Sacrificio
+			avanzarBases();
+			revisarCarreras(1);
+			vecBases[0]=0;
+	    }
   }
 
 /*--------- GRAMÁTICA  --------------*/  
@@ -177,7 +200,10 @@ HomeRun = "4B"|"4b"|"HR"|"Hr"|"hR"|hr
 %eof{
 Imprimir();
 System.out.println("***FIN DEL ANALISIS***\n");
-
+System.out.println(carrerasLocal+" "+outs+" "+carrerasVisita+"\n");
+for(int i =0; i<4; i++){
+		System.out.println(vecBases[i]+" ");
+}
 %eof}
 
 /*---------- COMPONENTES LÉXICOS ---------------------*/
@@ -195,13 +221,14 @@ System.out.println("***FIN DEL ANALISIS***\n");
 
 
 ({Ponche}|{OutAereo}) {outs++;} //Solo aumenta un out, no cambia las bases
-({OutEnEquipo}|{OutYAvance}|{ToqueSacrificio}) {this.bases(1);outs++;} //Out al jugador en la base más avanzada, cambia las bases aumenta los outs
-({DobleJugada}) {this.bases(2);outs=outs+2;}  // Hay que eliminar dos jugadores contrarios y agregar dos outs
-({ErrorYAvance}|{Hit}) {bases(3);}
+({OutEnEquipo}|{OutYAvance}) {outs++;bases(1);} //Out al jugador en la base más avanzada, cambia las bases aumenta los outs
+({DobleJugada}) {bases(2);outs=outs+2;}  // Hay que eliminar dos jugadores contrarios y agregar dos outs
+({ErrorYAvance}|{Hit}) { bases(3);}
 {Doble} {bases(4);}
 {Triple} {bases(5);}
 {HomeRun} {bases(6);}
 ({BasePorBolas}|{JugadorGolpeado}) {bases(7);}
+{ToqueSacrificio} {bases(8);} /*Avanzar todos y poner en blanco primera*/
 . {}
 /*FC y DP: al máximo avance y si no hay al bateador.*/
 /*En out aéreo NADIE AVANZA y se hace out al BATEADOR*/
