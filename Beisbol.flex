@@ -228,7 +228,7 @@ for(int i =0; i<4; i++){
 {Triple} {bases(5);}
 {HomeRun} {bases(6);}
 ({BasePorBolas}|{JugadorGolpeado}) {bases(7);}
-{ToqueSacrificio} {bases(8);} /*Avanzar todos y poner en blanco primera*/
+{ToqueSacrificio} {outs++;bases(8);} /*Avanzar todos y poner en blanco primera*/
 . {}
 /*FC y DP: al máximo avance y si no hay al bateador.*/
 /*En out aéreo NADIE AVANZA y se hace out al BATEADOR*/
