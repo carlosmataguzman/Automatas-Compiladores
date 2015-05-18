@@ -14,7 +14,6 @@ int [] vecBases = new int[]{0,0,0,0};
 int carrerasLocal = 0;
 int carrerasVisita = 0;
 int outs=0;
-String bases = "O  O  O";
 
 /*------------------------------MÉTODOS DE IMPRESIÓN---------------------------------*/
 void Imprimir(){
@@ -29,10 +28,10 @@ String PonerDatos(){
 	ayudante = PonerBlancos(Integer.toString(carrerasLocal),7); //La columna CASA tiene 10 espacios, se empieza a escribir al 3ro.
 	String resultado = "|   "+ayudante+"|   "+(outs+3)%3+"   ";  //Se suma 3 a los outs para el caso de los 3 primeros outs del juego.
 	ayudante = PonerBlancos(Integer.toString((outs/6)+1),4); //Espacios en blanco para la columna ENTRADA.
-	if(outs%6>3){//Se indica cuál equipo está bateandao, ALTA=CASA, BAJA=VISITA
-		resultado = resultado+"| ALTA  "+ayudante; //Falta completar bases
+	if(outs%6<3){//Se indica cuál equipo está bateandao, ALTA=CASA, BAJA=VISITA
+		resultado = resultado+"| BAJA  "+ayudante; //Falta completar bases
 	}else{
-		resultado = resultado+"| BAJA  "+ayudante;
+		resultado = resultado+"| ALTA  "+ayudante;
 	}
 	ayudante = PonerBases();
 	resultado = resultado+"|"+ayudante;
@@ -60,9 +59,6 @@ String PonerBases(){
 /*-------------------MÉTODOS DE CONTROL DE JUEGO---------------------*/
 
 void revisarCarreras(int carreras){
-		for(int i =0; i<4; i++){
-		System.out.println(vecBases[i]+" ");
-		}
 		boolean casa = true;
 		if(outs%6<3)casa = false;
 		if(vecBases[3]==1){
@@ -175,11 +171,12 @@ void bases(int situacion){
 			vecBases[0]=0;
 	    }
   }
+  
+
 
 /*--------- GRAMÁTICA  --------------*/  
 
 %}
-
 Jugador = [0-9]
 Ponche = "K"|"k"
 OutEnEquipo = ({Jugador}{Jugador})
@@ -200,26 +197,10 @@ HomeRun = "4B"|"4b"|"HR"|"Hr"|"hR"|hr
 %eof{
 Imprimir();
 System.out.println("***FIN DEL ANALISIS***\n");
-System.out.println(carrerasLocal+" "+outs+" "+carrerasVisita+"\n");
-for(int i =0; i<4; i++){
-		System.out.println(vecBases[i]+" ");
-}
 %eof}
-
 /*---------- COMPONENTES LÉXICOS ---------------------*/
 
 %%
-//({Ponche}|{OutAereo}|{OutEnEquipo}) {System.out.println("OUT");outs++;} //nunca generan movimiento en bases. Out en equipo talvez.
-//({DobleJugada}) {System.out.println("DOS OUT");outs=outs+2;}
-//({ToqueSacrificio}|{OutYAvance}) {System.out.println("OUT Y AVANZA");outs++; base++;}
-//({ErrorYAvance}|{JugadorGolpeado}|{BasePorBolas}|{Hit}) {System.out.println("AVANZA");base++;}
-//{Doble} {System.out.println("AVANZA 2");base=base+2;}
-//{Triple} {System.out.println("AVANZA 3");base=base+3;}
-//{HomeRun} {System.out.println("HOME RUN!!");base=base+4;}
-//. {}
-
-
-
 ({Ponche}|{OutAereo}) {outs++;} //Solo aumenta un out, no cambia las bases
 ({OutEnEquipo}|{OutYAvance}) {outs++;bases(1);} //Out al jugador en la base más avanzada, cambia las bases aumenta los outs
 ({DobleJugada}) {bases(2);outs=outs+2;}  // Hay que eliminar dos jugadores contrarios y agregar dos outs
@@ -229,7 +210,5 @@ for(int i =0; i<4; i++){
 {HomeRun} {bases(6);}
 ({BasePorBolas}|{JugadorGolpeado}) {bases(7);}
 {ToqueSacrificio} {outs++;bases(8);} /*Avanzar todos y poner en blanco primera*/
-. {}
-/*FC y DP: al máximo avance y si no hay al bateador.*/
-/*En out aéreo NADIE AVANZA y se hace out al BATEADOR*/
-/*En doble play HAY OUTS A LAS ULTIMAS POSICIONES*/
+. { }
+
